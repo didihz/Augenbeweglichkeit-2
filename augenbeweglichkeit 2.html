@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Augentraining – Augenbeweglichkeit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap');
+
+  :root {
+    --primary: #4A6FA5;
+    --primary-light: #6B8FC5;
+    --primary-dark: #2D4A73;
+    --accent: #FF8C42;
+    --accent-light: #FFB07A;
+    --accent-glow: rgba(255, 140, 66, 0.3);
+    --green: #5CB85C;
+    --green-light: #7ED07E;
+    --bg: #F0F4F8;
+    --bg-card: #FFFFFF;
+    --text: #2C3E50;
+    --text-light: #7F8C9B;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 20px rgba(74, 111, 165, 0.3);
+    position: relative;
+    z-index: 10;
+  }
+
+  .header h1 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    flex: 1;
+    text-align: center;
+  }
+
+  .btn-back {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .btn-back:hover { background: rgba(255,255,255,0.3); }
+
+  .header-spacer { width: 40px; }
+
+  /* ===== MENU SCREEN ===== */
+  .screen { display: none; }
+  .screen.active { display: flex; flex-direction: column; min-height: calc(100vh - 72px); }
+
+  .menu-container {
+    flex: 1;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .menu-intro {
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 20px;
+  }
+
+  .menu-intro .eye-icon {
+    font-size: 3rem;
+    margin-bottom: 8px;
+    display: block;
+    animation: eyeBounce 2s ease-in-out infinite;
+  }
+
+  @keyframes eyeBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .menu-intro h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.5rem;
+    color: var(--primary-dark);
+    margin-bottom: 6px;
+  }
+
+  .menu-intro p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .exercise-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .exercise-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    border: 2px solid transparent;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .exercise-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--primary-light);
+    transition: height 0.25s;
+  }
+
+  .exercise-card:hover, .exercise-card:active {
+    border-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .exercise-card:hover::before { height: 6px; }
+
+  .exercise-card .card-icon {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .exercise-card .card-title {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary-dark);
+    margin-bottom: 4px;
+  }
+
+  .exercise-card .card-desc {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    line-height: 1.4;
+  }
+
+  /* Full-width last card if odd number */
+  .exercise-card.full-width {
+    grid-column: 1 / -1;
+  }
+
+  /* ===== EXERCISE SCREEN ===== */
+  .exercise-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* Controls Panel */
+  .controls-panel {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 14px;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .control-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    min-width: 95px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .speed-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--green) 0%, var(--accent) 50%, #E74C3C 100%);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid var(--primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .speed-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  .speed-value {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary);
+    min-width: 35px;
+    text-align: right;
+  }
+
+  .speed-unit {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    font-weight: 400;
+  }
+
+  /* Canvas Area */
+  .canvas-area {
+    flex: 1;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+  }
+
+  /* Play/Pause overlay */
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.85);
+    z-index: 5;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+
+  .play-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .play-btn {
+    width: 80px;
+    height: 80px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(74, 111, 165, 0.4);
+    transition: transform 0.2s;
+  }
+
+  .play-btn:hover { transform: scale(1.08); }
+
+  .play-btn svg {
+    width: 36px;
+    height: 36px;
+    fill: white;
+    margin-left: 4px;
+  }
+
+  .pause-icon {
+    display: flex;
+    gap: 6px;
+  }
+  .pause-icon span {
+    width: 8px;
+    height: 28px;
+    background: white;
+    border-radius: 3px;
+  }
+
+  /* Bottom bar */
+  .bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 14px 0 6px;
+  }
+
+  .btn-nav {
+    background: var(--bg-card);
+    border: 2px solid var(--primary-light);
+    color: var(--primary);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+  }
+  .btn-nav:hover {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .exercise-indicator {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary);
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .btn-playpause {
+    background: var(--accent);
+    border: none;
+    color: white;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px var(--accent-glow);
+    transition: all 0.2s;
+  }
+  .btn-playpause:hover { transform: scale(1.08); }
+
+  /* ===== OBJECT SELECTOR ===== */
+  .object-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #E8ECF0;
+  }
+
+  .object-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .object-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    border: 2px solid #E0E6ED;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+  }
+  .object-btn.selected {
+    border-color: var(--primary);
+    background: rgba(74, 111, 165, 0.08);
+    box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.15);
+  }
+  .object-btn:hover { border-color: var(--primary-light); }
+
+  /* ===== RESPONSIVE ===== */
+
+  /* ===== INFO BOX (Menu) ===== */
+  .info-box {
+    background: linear-gradient(135deg, #FFF9E6 0%, #FFF3CC 100%);
+    border: 2px solid #F5D06B;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(245, 208, 107, 0.2);
+  }
+
+  .info-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #8B6914;
+    transition: background 0.2s;
+  }
+  .info-toggle:hover { background: rgba(245, 208, 107, 0.15); }
+
+  .info-icon { font-size: 1.3rem; }
+
+  .info-toggle-text { flex: 1; text-align: left; }
+
+  .info-arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+  }
+  .info-arrow.open { transform: rotate(180deg); }
+
+  .info-content {
+    display: none;
+    padding: 0 18px 16px;
+    animation: fadeIn 0.3s ease;
+  }
+  .info-content.open { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .info-content p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #5A4510;
+    margin-bottom: 10px;
+  }
+
+  .info-benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.6);
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: #5A4510;
+  }
+
+  .info-benefit span:first-child {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .info-tip {
+    background: rgba(255,255,255,0.5);
+    border-left: 3px solid #F5D06B;
+    padding: 8px 12px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 0.85rem;
+    color: #8B6914;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* ===== EXERCISE TIP (Exercise Screen) ===== */
+  .exercise-tip {
+    background: linear-gradient(135deg, #EBF5FB 0%, #D6EAF8 100%);
+    border: 1.5px solid #AED6F1;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--primary-dark);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .exercise-tip.hidden { display: none; }
+
+  .tip-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+  .tip-text { flex: 1; }
+
+  .tip-close {
+    background: none;
+    border: none;
+    color: var(--primary-light);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    border-radius: 50%;
+    transition: background 0.2s;
+  }
+  .tip-close:hover { background: rgba(74, 111, 165, 0.1); }
+
+  @media (max-width: 400px) {
+    .exercise-grid { grid-template-columns: 1fr; }
+    .exercise-card.full-width { grid-column: auto; }
+    .header h1 { font-size: 1.2rem; }
+  }
+
+  @media (min-height: 800px) {
+    .canvas-area { min-height: 450px; }
+  }
+
+  /* Print hide */
+  @media print { body { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <button class="btn-back" id="btnBack" title="Zurück">←</button>
+  <h1 id="headerTitle">👁️ Augentraining</h1>
+  <div class="header-spacer"></div>
+</div>
+
+<!-- MENU SCREEN -->
+<div class="screen active" id="menuScreen">
+  <div class="menu-container">
+    <div class="menu-intro">
+      <span class="eye-icon">👀</span>
+      <h2>Trainiere deine Augen!</h2>
+      <p>Folge den Objekten mit deinen Augen, ohne den Kopf zu bewegen. Wähle eine Übung aus:</p>
+    </div>
+
+    <div class="info-box" id="infoBoxMenu">
+      <button class="info-toggle" id="infoToggleMenu">
+        <span class="info-icon">💡</span>
+        <span class="info-toggle-text">Warum hilft mir das beim Lesen?</span>
+        <span class="info-arrow" id="infoArrowMenu">▼</span>
+      </button>
+      <div class="info-content" id="infoContentMenu">
+        <p><strong>Beim Lesen machen deine Augen ganz viele kleine Sprünge</strong> – von Wort zu Wort, von Zeile zu Zeile. Das nennt man <em>Blicksprünge</em>.</p>
+        <p>Wenn deine Augen gut trainiert sind, passiert Folgendes:</p>
+        <div class="info-benefit">
+          <span>🎯</span>
+          <span><strong>Du findest Wörter schneller</strong> – Deine Augen springen genau dorthin, wo das nächste Wort steht.</span>
+        </div>
+        <div class="info-benefit">
+          <span>📖</span>
+          <span><strong>Du verlierst seltener die Zeile</strong> – Am Ende einer Zeile müssen deine Augen einen großen Sprung zum Anfang der nächsten Zeile machen. Das üben wir hier!</span>
+        </div>
+        <div class="info-benefit">
+          <span>⚡</span>
+          <span><strong>Du liest flüssiger</strong> – Wenn deine Augen sich geschmeidig bewegen, kannst du dich besser auf den Inhalt konzentrieren, statt über einzelne Wörter zu stolpern.</span>
+        </div>
+        <div class="info-benefit">
+          <span>🧠</span>
+          <span><strong>Dein Kopf hat mehr Platz zum Denken</strong> – Wenn das Augenbewegen leicht geht, bleibt mehr Energie übrig, um das Gelesene zu verstehen.</span>
+        </div>
+        <p class="info-tip">Tipp: Halte deinen Kopf still und bewege nur die Augen. Fang langsam an und steigere das Tempo Stück für Stück!</p>
+      </div>
+    </div>
+
+    <div class="exercise-grid">
+      <div class="exercise-card" data-exercise="circle">
+        <span class="card-icon">⭕</span>
+        <div class="card-title">Im Kreis</div>
+        <div class="card-desc">Trainiert gleichmäßige Augenbewegungen in alle Richtungen</div>
+      </div>
+      <div class="exercise-card" data-exercise="horizontal">
+        <span class="card-icon">↔️</span>
+        <div class="card-title">Hin & Her</div>
+        <div class="card-desc">So bewegen sich deine Augen beim Lesen einer Zeile</div>
+      </div>
+      <div class="exercise-card" data-exercise="vertical">
+        <span class="card-icon">↕️</span>
+        <div class="card-title">Auf & Ab</div>
+        <div class="card-desc">Hilft dir, beim Lesen die richtige Zeile zu finden</div>
+      </div>
+      <div class="exercise-card" data-exercise="diagonal">
+        <span class="card-icon">↗️</span>
+        <div class="card-title">Diagonal</div>
+        <div class="card-desc">Übt den Sprung vom Ende einer Zeile zum Anfang der nächsten</div>
+      </div>
+      <div class="exercise-card" data-exercise="eight">
+        <span class="card-icon">♾️</span>
+        <div class="card-title">Liegende Acht</div>
+        <div class="card-desc">Beide Gehirnhälften arbeiten zusammen – gut für die Konzentration</div>
+      </div>
+      <div class="exercise-card" data-exercise="zigzag">
+        <span class="card-icon">⚡</span>
+        <div class="card-title">Zickzack</div>
+        <div class="card-desc">Übt schnelle Richtungswechsel, wie beim Überfliegen eines Textes</div>
+      </div>
+      <div class="exercise-card" data-exercise="spiral">
+        <span class="card-icon">🌀</span>
+        <div class="card-title">Spirale</div>
+        <div class="card-desc">Trainiert, den Blick gezielt zu lenken – von groß nach klein</div>
+      </div>
+      <div class="exercise-card full-width" data-exercise="random">
+        <span class="card-icon">🎯</span>
+        <div class="card-title">Zufall</div>
+        <div class="card-desc">Trainiert schnelle Blicksprünge – so wie deine Augen beim Lesen von Wort zu Wort springen</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXERCISE SCREEN -->
+<div class="screen" id="exerciseScreen">
+  <div class="exercise-container">
+    <!-- Controls -->
+    <div class="controls-panel">
+      <div class="control-row">
+        <span class="control-label">Tempo</span>
+        <input type="range" class="speed-slider" id="speedSlider" min="1" max="10" value="3" step="1">
+        <span class="speed-value" id="speedValue">3</span>
+      </div>
+      <div class="object-row">
+        <span class="control-label">Objekt</span>
+        <div class="object-options" id="objectOptions">
+          <button class="object-btn selected" data-obj="ball" title="Ball">🔵</button>
+          <button class="object-btn" data-obj="star" title="Stern">⭐</button>
+          <button class="object-btn" data-obj="butterfly" title="Schmetterling">🦋</button>
+          <button class="object-btn" data-obj="rocket" title="Rakete">🚀</button>
+          <button class="object-btn" data-obj="fish" title="Fisch">🐟</button>
+          <button class="object-btn" data-obj="bee" title="Biene">🐝</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exercise Info Tip -->
+    <div class="exercise-tip" id="exerciseTip">
+      <span class="tip-icon">💡</span>
+      <span class="tip-text" id="tipText">Diese Übung hilft dir beim Lesen.</span>
+      <button class="tip-close" id="tipClose" title="Schließen">✕</button>
+    </div>
+
+    <!-- Canvas -->
+    <div class="canvas-area" id="canvasArea">
+      <canvas id="mainCanvas"></canvas>
+      <div class="play-overlay" id="playOverlay">
+        <div class="play-btn">
+          <svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-bar">
+      <button class="btn-nav" id="btnPrev" title="Vorherige Übung">◀</button>
+      <span class="exercise-indicator" id="exerciseIndicator">Übung 1 / 8</span>
+      <button class="btn-playpause" id="btnPlayPause" title="Start / Pause">▶</button>
+      <span class="exercise-indicator" id="exerciseName">Im Kreis</span>
+      <button class="btn-nav" id="btnNext" title="Nächste Übung">▶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== APP STATE =====
+const exercises = [
+  { id: 'circle',     name: 'Im Kreis',      icon: '⭕',  tip: 'Gleichmäßige Augenbewegungen helfen dir, flüssiger über einen Text zu schauen, ohne hängen zu bleiben.' },
+  { id: 'horizontal', name: 'Hin & Her',      icon: '↔️', tip: 'Beim Lesen bewegen sich deine Augen genau so – von links nach rechts über jede Zeile.' },
+  { id: 'vertical',   name: 'Auf & Ab',       icon: '↕️', tip: 'Das hilft dir, die richtige Zeile zu finden und nicht zu verrutschen, wenn du einen längeren Text liest.' },
+  { id: 'diagonal',   name: 'Diagonal',       icon: '↗️', tip: 'Am Ende jeder Zeile machen deine Augen einen schrägen Sprung zum Anfang der nächsten Zeile – genau das übst du hier!' },
+  { id: 'eight',      name: 'Liegende Acht',  icon: '♾️', tip: 'Die liegende Acht verbindet beide Seiten – das fördert die Zusammenarbeit deiner Gehirnhälften und verbessert die Konzentration.' },
+  { id: 'zigzag',     name: 'Zickzack',       icon: '⚡',  tip: 'Schnelle Richtungswechsel trainieren deine Augen fürs Überfliegen von Texten, wenn du etwas Bestimmtes suchst.' },
+  { id: 'spiral',     name: 'Spirale',        icon: '🌀',  tip: 'Hier lernst du, deinen Blick gezielt zu steuern – wichtig, wenn du dich auf ein einzelnes Wort oder eine Stelle im Text konzentrieren willst.' },
+  { id: 'random',     name: 'Zufall',         icon: '🎯',  tip: 'Schnelle Blicksprünge zu zufälligen Punkten – so ähnlich springen deine Augen beim Lesen von Wort zu Wort!' }
+];
+
+let state = {
+  screen: 'menu',
+  exerciseIndex: 0,
+  speed: 3,
+  playing: false,
+  objectType: 'ball',
+  animFrame: null,
+  time: 0,
+  lastTimestamp: 0,
+  // for random exercise
+  randomTarget: null,
+  randomCurrent: null,
+  randomProgress: 0,
+  // trail
+  trail: []
+};
+
+// ===== DOM REFS =====
+const $ = id => document.getElementById(id);
+const menuScreen = $('menuScreen');
+const exerciseScreen = $('exerciseScreen');
+const headerTitle = $('headerTitle');
+const btnBack = $('btnBack');
+const speedSlider = $('speedSlider');
+const speedValue = $('speedValue');
+const canvas = $('mainCanvas');
+const ctx = canvas.getContext('2d');
+const playOverlay = $('playOverlay');
+const btnPlayPause = $('btnPlayPause');
+const btnPrev = $('btnPrev');
+const btnNext = $('btnNext');
+const exerciseIndicator = $('exerciseIndicator');
+const exerciseName = $('exerciseName');
+const canvasArea = $('canvasArea');
+const exerciseTip = $('exerciseTip');
+const tipText = $('tipText');
+const tipClose = $('tipClose');
+const infoToggleMenu = $('infoToggleMenu');
+const infoContentMenu = $('infoContentMenu');
+const infoArrowMenu = $('infoArrowMenu');
+
+// ===== NAVIGATION =====
+function showScreen(name) {
+  state.screen = name;
+  menuScreen.classList.toggle('active', name === 'menu');
+  exerciseScreen.classList.toggle('active', name === 'exercise');
+
+  if (name === 'menu') {
+    headerTitle.textContent = '👁️ Augentraining';
+    stopAnimation();
+  } else {
+    updateExerciseUI();
+  }
+}
+
+function selectExercise(id) {
+  const idx = exercises.findIndex(e => e.id === id);
+  if (idx >= 0) {
+    state.exerciseIndex = idx;
+    state.playing = false;
+    state.time = 0;
+    state.trail = [];
+    initRandomTarget();
+    showScreen('exercise');
+    playOverlay.classList.remove('hidden');
+    resizeCanvas();
+  }
+}
+
+function updateExerciseUI() {
+  const ex = exercises[state.exerciseIndex];
+  headerTitle.textContent = `${ex.icon} ${ex.name}`;
+  exerciseIndicator.textContent = `Übung ${state.exerciseIndex + 1} / ${exercises.length}`;
+  exerciseName.textContent = ex.name;
+  btnPrev.disabled = state.exerciseIndex === 0;
+  btnNext.disabled = state.exerciseIndex === exercises.length - 1;
+  // Show reading tip
+  tipText.textContent = ex.tip;
+  exerciseTip.classList.remove('hidden');
+}
+
+function prevExercise() {
+  if (state.exerciseIndex > 0) {
+    state.exerciseIndex--;
+    state.time = 0;
+    state.trail = [];
+    initRandomTarget();
+    updateExerciseUI();
+    drawFrame();
+  }
+}
+
+function nextExercise() {
+  if (state.exerciseIndex < exercises.length - 1) {
+    state.exerciseIndex++;
+    state.time = 0;
+    state.trail = [];
+    initRandomTarget();
+    updateExerciseUI();
+    drawFrame();
+  }
+}
+
+// ===== CANVAS =====
+function resizeCanvas() {
+  const rect = canvasArea.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  if (!state.playing) drawFrame();
+}
+
+window.addEventListener('resize', () => {
+  if (state.screen === 'exercise') resizeCanvas();
+});
+
+// ===== ANIMATION =====
+function startAnimation() {
+  state.playing = true;
+  state.lastTimestamp = performance.now();
+  playOverlay.classList.add('hidden');
+  btnPlayPause.innerHTML = '<span style="display:flex;gap:4px"><span style="width:6px;height:22px;background:white;border-radius:2px"></span><span style="width:6px;height:22px;background:white;border-radius:2px"></span></span>';
+  animate();
+}
+
+function stopAnimation() {
+  state.playing = false;
+  if (state.animFrame) cancelAnimationFrame(state.animFrame);
+  btnPlayPause.textContent = '▶';
+}
+
+function togglePlay() {
+  if (state.playing) {
+    stopAnimation();
+  } else {
+    startAnimation();
+  }
+}
+
+function animate(timestamp) {
+  if (!state.playing) return;
+
+  if (!timestamp) timestamp = performance.now();
+  const dt = (timestamp - state.lastTimestamp) / 1000;
+  state.lastTimestamp = timestamp;
+
+  // Speed factor: 1=very slow, 10=very fast
+  const speedFactor = 0.15 + (state.speed - 1) * 0.12;
+  state.time += dt * speedFactor;
+
+  drawFrame();
+
+  state.animFrame = requestAnimationFrame(animate);
+}
+
+// ===== POSITION CALCULATIONS =====
+function getPosition(exerciseId, t, w, h) {
+  const cx = w / 2;
+  const cy = h / 2;
+  const margin = 40;
+  const rx = (w / 2) - margin;
+  const ry = (h / 2) - margin;
+
+  switch (exerciseId) {
+    case 'circle': {
+      const angle = t * Math.PI * 2;
+      return {
+        x: cx + Math.cos(angle) * rx * 0.85,
+        y: cy + Math.sin(angle) * ry * 0.85
+      };
+    }
+    case 'horizontal': {
+      const progress = (Math.sin(t * Math.PI * 2) + 1) / 2;
+      return {
+        x: margin + progress * (w - margin * 2),
+        y: cy
+      };
+    }
+    case 'vertical': {
+      const progress = (Math.sin(t * Math.PI * 2) + 1) / 2;
+      return {
+        x: cx,
+        y: margin + progress * (h - margin * 2)
+      };
+    }
+    case 'diagonal': {
+      const phase = t % 2;
+      let progress;
+      if (phase < 1) {
+        progress = (Math.sin((phase - 0.5) * Math.PI) + 1) / 2;
+        return {
+          x: margin + progress * (w - margin * 2),
+          y: margin + progress * (h - margin * 2)
+        };
+      } else {
+        progress = (Math.sin((phase - 1.5) * Math.PI) + 1) / 2;
+        return {
+          x: w - margin - progress * (w - margin * 2),
+          y: margin + progress * (h - margin * 2)
+        };
+      }
+    }
+    case 'eight': {
+      const angle = t * Math.PI * 2;
+      return {
+        x: cx + Math.sin(angle) * rx * 0.85,
+        y: cy + Math.sin(angle * 2) * ry * 0.4
+      };
+    }
+    case 'zigzag': {
+      const segments = 6;
+      const segT = (t * 1.5) % segments;
+      const seg = Math.floor(segT);
+      const localT = segT - seg;
+      const smooth = (Math.sin((localT - 0.5) * Math.PI) + 1) / 2;
+      const yStep = (h - margin * 2) / segments;
+      const yPos = margin + seg * yStep + smooth * yStep;
+      const xPos = (seg % 2 === 0)
+        ? margin + smooth * (w - margin * 2)
+        : w - margin - smooth * (w - margin * 2);
+      return { x: xPos, y: yPos };
+    }
+    case 'spiral': {
+      const spiralT = (t * 0.5) % 1;
+      const radius = rx * 0.9 * (1 - spiralT * 0.85);
+      const angle = spiralT * Math.PI * 8;
+      return {
+        x: cx + Math.cos(angle) * radius,
+        y: cy + Math.sin(angle) * (radius * (ry / rx))
+      };
+    }
+    case 'random': {
+      return getRandomPosition(w, h);
+    }
+    default:
+      return { x: cx, y: cy };
+  }
+}
+
+// Random exercise helpers
+function initRandomTarget() {
+  state.randomTarget = null;
+  state.randomCurrent = null;
+  state.randomProgress = 0;
+}
+
+function getRandomPosition(w, h) {
+  const margin = 50;
+  if (!state.randomCurrent) {
+    state.randomCurrent = { x: w / 2, y: h / 2 };
+    state.randomTarget = {
+      x: margin + Math.random() * (w - margin * 2),
+      y: margin + Math.random() * (h - margin * 2)
+    };
+    state.randomProgress = 0;
+  }
+
+  state.randomProgress += 0.02 * (0.5 + state.speed * 0.15);
+
+  if (state.randomProgress >= 1) {
+    state.randomCurrent = { ...state.randomTarget };
+    state.randomTarget = {
+      x: margin + Math.random() * (w - margin * 2),
+      y: margin + Math.random() * (h - margin * 2)
+    };
+    state.randomProgress = 0;
+  }
+
+  // Ease in-out
+  const ease = state.randomProgress < 0.5
+    ? 2 * state.randomProgress * state.randomProgress
+    : 1 - Math.pow(-2 * state.randomProgress + 2, 2) / 2;
+
+  return {
+    x: state.randomCurrent.x + (state.randomTarget.x - state.randomCurrent.x) * ease,
+    y: state.randomCurrent.y + (state.randomTarget.y - state.randomCurrent.y) * ease
+  };
+}
+
+// ===== DRAWING =====
+function drawFrame() {
+  const rect = canvasArea.getBoundingClientRect();
+  const w = rect.width;
+  const h = rect.height;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Draw subtle guide path
+  drawGuidePath(w, h);
+
+  const ex = exercises[state.exerciseIndex];
+  const pos = getPosition(ex.id, state.time, w, h);
+
+  // Update trail
+  if (state.playing) {
+    state.trail.push({ x: pos.x, y: pos.y, age: 0 });
+    if (state.trail.length > 30) state.trail.shift();
+    state.trail.forEach(p => p.age += 0.05);
+  }
+
+  // Draw trail
+  drawTrail();
+
+  // Draw object
+  drawObject(pos.x, pos.y);
+}
+
+function drawGuidePath(w, h) {
+  const ex = exercises[state.exerciseIndex];
+  const cx = w / 2;
+  const cy = h / 2;
+  const margin = 40;
+  const rx = (w / 2) - margin;
+  const ry = (h / 2) - margin;
+
+  ctx.strokeStyle = 'rgba(74, 111, 165, 0.08)';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([8, 8]);
+
+  switch (ex.id) {
+    case 'circle':
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rx * 0.85, ry * 0.85, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      break;
+    case 'horizontal':
+      ctx.beginPath();
+      ctx.moveTo(margin, cy);
+      ctx.lineTo(w - margin, cy);
+      ctx.stroke();
+      break;
+    case 'vertical':
+      ctx.beginPath();
+      ctx.moveTo(cx, margin);
+      ctx.lineTo(cx, h - margin);
+      ctx.stroke();
+      break;
+    case 'eight':
+      ctx.beginPath();
+      for (let i = 0; i <= 100; i++) {
+        const a = (i / 100) * Math.PI * 2;
+        const x = cx + Math.sin(a) * rx * 0.85;
+        const y = cy + Math.sin(a * 2) * ry * 0.4;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      break;
+  }
+
+  ctx.setLineDash([]);
+}
+
+function drawTrail() {
+  for (let i = 0; i < state.trail.length; i++) {
+    const p = state.trail[i];
+    const alpha = Math.max(0, 0.3 - p.age * 0.3);
+    const size = Math.max(2, 12 - p.age * 10);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(74, 111, 165, ${alpha})`;
+    ctx.fill();
+  }
+}
+
+function drawObject(x, y) {
+  const size = 28;
+
+  switch (state.objectType) {
+    case 'ball':
+      // Gradient ball
+      const grad = ctx.createRadialGradient(x - 5, y - 5, 2, x, y, size);
+      grad.addColorStop(0, '#5DADE2');
+      grad.addColorStop(0.7, '#2E86C1');
+      grad.addColorStop(1, '#1A5276');
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+      // Shine
+      ctx.beginPath();
+      ctx.arc(x - 8, y - 8, 7, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.fill();
+      break;
+
+    case 'star':
+    case 'butterfly':
+    case 'rocket':
+    case 'fish':
+    case 'bee':
+      const emojis = {
+        star: '⭐', butterfly: '🦋', rocket: '🚀', fish: '🐟', bee: '🐝'
+      };
+      ctx.font = `${size * 2}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(emojis[state.objectType], x, y);
+      break;
+  }
+
+  // Outer glow
+  if (state.objectType === 'ball') {
+    ctx.beginPath();
+    ctx.arc(x, y, size + 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(93, 173, 226, 0.1)';
+    ctx.fill();
+  }
+}
+
+// ===== EVENT HANDLERS =====
+
+// Menu cards
+document.querySelectorAll('.exercise-card').forEach(card => {
+  card.addEventListener('click', () => {
+    selectExercise(card.dataset.exercise);
+  });
+});
+
+// Back button
+btnBack.addEventListener('click', () => {
+  if (state.screen === 'exercise') {
+    stopAnimation();
+    showScreen('menu');
+  }
+});
+
+// Speed slider
+speedSlider.addEventListener('input', () => {
+  state.speed = parseInt(speedSlider.value);
+  speedValue.textContent = state.speed;
+});
+
+// Play overlay
+playOverlay.addEventListener('click', () => {
+  startAnimation();
+});
+
+// Play/Pause button
+btnPlayPause.addEventListener('click', togglePlay);
+
+// Prev/Next
+btnPrev.addEventListener('click', prevExercise);
+btnNext.addEventListener('click', nextExercise);
+
+// Object selector
+document.querySelectorAll('.object-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.object-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    state.objectType = btn.dataset.obj;
+    if (!state.playing) drawFrame();
+  });
+});
+
+// Canvas click to toggle
+canvasArea.addEventListener('click', (e) => {
+  if (e.target === canvas) togglePlay();
+});
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (state.screen !== 'exercise') return;
+  switch(e.key) {
+    case ' ':
+    case 'Enter':
+      e.preventDefault();
+      togglePlay();
+      break;
+    case 'ArrowLeft':
+      prevExercise();
+      break;
+    case 'ArrowRight':
+      nextExercise();
+      break;
+    case 'ArrowUp':
+      speedSlider.value = Math.min(10, parseInt(speedSlider.value) + 1);
+      speedSlider.dispatchEvent(new Event('input'));
+      break;
+    case 'ArrowDown':
+      speedSlider.value = Math.max(1, parseInt(speedSlider.value) - 1);
+      speedSlider.dispatchEvent(new Event('input'));
+      break;
+    case 'Escape':
+      stopAnimation();
+      showScreen('menu');
+      break;
+  }
+});
+
+// Initial resize observer
+const resizeObserver = new ResizeObserver(() => {
+  if (state.screen === 'exercise') resizeCanvas();
+});
+resizeObserver.observe(canvasArea);
+
+// Info box toggle (menu)
+infoToggleMenu.addEventListener('click', () => {
+  infoContentMenu.classList.toggle('open');
+  infoArrowMenu.classList.toggle('open');
+});
+
+// Exercise tip close
+tipClose.addEventListener('click', () => {
+  exerciseTip.classList.add('hidden');
+});
+
+// Init
+showScreen('menu');
+</script>
+</body>
+</html>
